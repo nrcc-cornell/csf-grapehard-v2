@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useMemo, Fragment, useEffect } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import PropTypes from 'prop-types';
-import { format, subDays, addDays, parseISO } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import { Box, Button } from '@mui/material';
 
@@ -16,16 +15,16 @@ import exporting from 'highcharts/modules/exporting';
 NoDataToDisplay(Highcharts);
 accessibility(Highcharts);
 exporting(Highcharts);
-// Highcharts.Chart.prototype.showResetZoom = function () { return; };
 
 
 
-
+// Colors used in chart
 const blue = 'rgb(125,181,236)';
 const yellow = 'rgb(235,200,35)';
 const orange = 'rgb(245,152,57)';
 const red = 'rgb(239,32,32)';
 
+// Info for each stage of bud development
 const stageInfo = {
   'damagePercents': [10,50,90],
   'damageColors': [yellow, orange, red],
@@ -63,6 +62,8 @@ const stageInfo = {
   }
 };
 
+// Inputs: gdds- Array of numbers, phenology- apple species phenology from getData
+// Returns { stages- Array of string representing stage name for each day, kill50Temps- Array of numbers representing the temp at which 50% of buds die }
 function calcStageAndKill50Temps(gdds, phenology) {
   return gdds.reduce((acc, gdd) => {
     let stage = 'dormant';
@@ -94,7 +95,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
   const chartComponent = useRef(null);
   const [isZoomed, setIsZoomed] = useState('doi');
 
-
+  // If the date of interest changes, reset to initial chart zoom
   useEffect(() => {
     if (chartComponent && chartComponent.current) {
       if (isZoomed === 'doi') {
@@ -104,6 +105,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
   }, [dateOfInterest, chartComponent]);
 
 
+  // Handles changing to 30-day zoom around date of interest
   const thirtyZoom = () => {
     if (chartComponent && chartComponent.current) {
       const datesArr = chartComponent.current.chart.xAxis[0].categories;
@@ -124,13 +126,16 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
     }
   };
 
+  // Zoom out to show entire season
   const seasonZoom = () => {
     if (chartComponent && chartComponent.current) {
       chartComponent.current.chart.zoomOut();
     }
   };
 
+  // Memoized chart options, prevents unnecessary rerenders
   const getOptions = useMemo(() => {
+    // Get the stages and kill temps line for the observed data
     let { stages, kill50Temps } = calcStageAndKill50Temps(gdds, applePhenology);
     
     const newSeries = [{
@@ -147,6 +152,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
       isForecast: false
     }];
     
+    // If there is forecast data, add them as separate series to style them differently
     if (forecast.gdds.length > 0) {
       const { stages: foreStages, kill50Temps: foreK50Temps } = calcStageAndKill50Temps(forecast.gdds, applePhenology);
       stages = stages.concat(foreStages);
@@ -168,15 +174,14 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
         linkedTo: 'damage',
         isForecast: true
       });
-
-      const blanks = fillWith([], forecast.dates.length, null);
-      newSeries[0].data = newSeries[0].data.concat(blanks);
-      newSeries[1].data = newSeries[1].data.concat(blanks);
     }
 
     
     return {
-      credits: { enabled: false },
+      credits: {
+        text: 'Powered by NRCC',
+        href: 'http://www.nrcc.cornell.edu/'
+      },
       chart: {
         zoomType: 'x',
         events: {
@@ -219,6 +224,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
           width: 0.5
         },
         events: {
+          // Handles changing the zoom type in state
           setExtremes: function(e) {
             let type = 'custom';
             if (e.trigger === 'zoom' && e.max === undefined && e.min === undefined) {
@@ -237,7 +243,18 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
         },
         softMin: -27,
         softMax: 60,
-        startOnTick: false
+        startOnTick: false,
+        plotLines: [{
+          value: 32,
+          label: {
+            text: 'Freeze Point',
+            align: 'right',
+            style: { color: 'rgb(200,200,200)' }
+          },
+          dashStyle: 'Dash',
+          color: 'rgb(200,200,200)',
+          width: 3
+        }]
       },
       tooltip: {
         shared: true,

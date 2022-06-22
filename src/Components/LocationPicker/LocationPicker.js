@@ -34,6 +34,12 @@ export default function LocationPicker(props) {
 
   const mapRef = useRef(null);
 
+  // Handles ensuring state sync if no initial location is provided
+  useEffect(() => {
+    if (props.selected === '') {
+      props.newLocationsCallback(defaultId, defaultLocation);
+    }
+  }, []);
 
   // Handles moving the modal div to allow and disable clicking on the main page
   useEffect(() => {

@@ -38,7 +38,8 @@ function App() {
     const stored = localStorage.getItem(`${name}.locations`);
     return stored ? JSON.parse(stored) : {};
   });
-  const [selected, setSelected] = useState(localStorage.getItem(`${name}.selected` || ''));
+  const [selected, setSelected] = useState(localStorage.getItem(`${name}.selected`) || '');
+
 
   // Update data when selected location or date of interest change
   useEffect(() => {
@@ -46,19 +47,23 @@ function App() {
   }, [selected]);
   
   
+  // Handles getting the data for the chart
   const updateData = async (doi) => {
-    setData({});
-  
-    // Get list of thresholds from apple definitions
-    const thresholds = Object.values(appleTypes).reduce((acc, obj) => {
-      if (!acc.includes(obj.threshold)) acc.push(obj.threshold);
-      return acc;
-    }, []);
-  
-    const newData = await getData([locations[selected].lng, locations[selected].lat], doi, thresholds, 43);
-    setData(newData);
+    if (selected) {
+      setData({});
+    
+      // Get list of thresholds from apple definitions
+      const thresholds = Object.values(appleTypes).reduce((acc, obj) => {
+        if (!acc.includes(obj.threshold)) acc.push(obj.threshold);
+        return acc;
+      }, []);
+    
+      const newData = await getData([locations[selected].lng, locations[selected].lat], doi, thresholds, 43);
+      setData(newData);
+    }
   };
 
+  // Handles whether to update data on date change or not then sets the new date in state
   const handleDateChange = async (e) => {
     const newDateStr = e.target.value;
     const newDate = parseISO(newDateStr);
