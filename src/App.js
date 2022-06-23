@@ -25,6 +25,16 @@ import Chart from './Components/Chart/Chart';
 import SplineChart from './Components/Chart/SplineChart';
 import Loading from './Components/Loading';
 
+const green = '#0B0';
+const radioSX = {
+  marginLeft: '8px',
+  marginBottom: '3px',
+  padding: '5px',
+  color: green,
+  '&.Mui-checked': {
+    color: green,
+  }
+};
 
 
 
@@ -81,58 +91,85 @@ function App() {
 
   return (
     <Box>
-      <LocationPicker
-        selected={selected}
-        locations={locations}
-        newLocationsCallback={(s, l) => storeLocations(s, l, name, setSelected, setLocations)}
-        token={token}
-        bbox={bbox}
-        allowedStates={allowedStates}
-      />
-
-      <TextField
-        type='date'
-        label='Date of Interest'
-        value={date}
-        onChange={handleDateChange}
-        InputProps={{
-          inputProps: {
-            max: format(new Date(), 'yyyy-MM-dd')
+      <Box sx={{
+        display: 'flex',
+        width: 900,
+        height: 400,
+        border: `2px solid ${green}`,
+        margin: '20px auto'
+      }}>
+        <Box sx={{
+          width: 200,
+          boxSizing: 'border-box',
+          borderRight: `2px solid ${green}`,
+          padding: '4px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2
+        }}>
+          <Box>
+            <FormLabel color='success' sx={{ fontSize: '12.5px' }}>Location</FormLabel>
+            <LocationPicker
+              selected={selected}
+              locations={locations}
+              newLocationsCallback={(s, l) => storeLocations(s, l, name, setSelected, setLocations)}
+              token={token}
+              bbox={bbox}
+              allowedStates={allowedStates}
+              modalZIndex={1}
+            />
+          </Box>
+          <TextField
+            color='success'
+            type='date'
+            label='Date of Interest'
+            value={date}
+            onChange={handleDateChange}
+            InputProps={{
+              inputProps: {
+                max: format(new Date(), 'yyyy-MM-dd')
+              }
+            }}
+            variant='standard'
+          />
+          <FormControl>
+            <FormLabel color='success' id='apple-type' sx={{ fontSize: '12.5px' }}>Apple Type</FormLabel>
+            <RadioGroup
+              aria-labelledby='apple-type'
+              value={appleType}
+              onChange={(e) => setAppleType(e.target.value)}
+            >
+              {Object.keys(appleTypes).map(name => <FormControlLabel key={name} value={name} control={<Radio size='small' sx={radioSX} />} label={name} />)}
+            </RadioGroup>
+          </FormControl>
+        </Box>
+        <Box sx={{
+          width: 700
+        }}>
+          {Object.keys(data).length === 0 ?
+            <Loading />
+            :
+            <Chart
+              appleType={appleType}
+              applePhenology={appleTypes[appleType].phenology}
+              dates={data.dates}
+              dateOfInterest={date}
+              forecast={{ dates: data.forecast.dates, minTemps: data.forecast.minTemps, gdds: data.forecast[`thresh${appleTypes[appleType].threshold}`]}}
+              gdds={data[`thresh${appleTypes[appleType].threshold}`]}
+              loc={locations[selected].address}
+              minTemps={data.minTemps}
+            />
           }
-        }}
-        variant='standard'
-      />
+        </Box>
+      </Box>
 
-      <FormControl>
-        <FormLabel id='apple-type'>Apple Type</FormLabel>
-        <RadioGroup
-          aria-labelledby='apple-type'
-          value={appleType}
-          onChange={(e) => setAppleType(e.target.value)}
-        >
-          {Object.keys(appleTypes).map(name => <FormControlLabel key={name} value={name} control={<Radio />} label={name} />)}
-        </RadioGroup>
-      </FormControl>
-
-      {Object.keys(data).length === 0 ?
-        <Loading />
-        :
-        <Chart
-          appleType={appleType}
-          applePhenology={appleTypes[appleType].phenology}
-          dates={data.dates}
-          dateOfInterest={date}
-          forecast={{ dates: data.forecast.dates, minTemps: data.forecast.minTemps, gdds: data.forecast[`thresh${appleTypes[appleType].threshold}`]}}
-          gdds={data[`thresh${appleTypes[appleType].threshold}`]}
-          loc={locations[selected].address}
-          minTemps={data.minTemps}
-        />
-      }
-      {Object.keys(data).length === 0 ?
-        <Loading />
-        :
-        <SplineChart data={data.sLine} />
-      }
+      <Box>
+        {Object.keys(data).length === 0 ?
+          <Loading />
+          :
+          <SplineChart data={data.sLine} />
+        }
+      </Box>
     </Box>
   );
 }

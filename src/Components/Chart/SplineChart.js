@@ -11,8 +11,6 @@ NoDataToDisplay(Highcharts);
 
 
 
-
-
 export default function Chart({ data }) {
   const chartComponent = useRef(null);
   
@@ -45,7 +43,13 @@ export default function Chart({ data }) {
           },{
             data: data[1],
             name: 'Daily Min Temp'
-          }]
+          }],
+          tooltip: {
+            shared: true
+          },
+          title: {
+            text: 'Shows Fit of Hourly Spline Results to Daily Min Temps'
+          }
         }}
       />
     </Box>

@@ -81,6 +81,8 @@
   font-size: 11px;
   font-style: italic;
   text-decoration: underline;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 #loc-location-change:hover {
@@ -90,8 +92,8 @@
 
 #loc-location-text {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 16px;
+  margin-bottom: 4px;
 }
 
 #loc-map {
@@ -155,7 +157,7 @@
   background-color: rgba(0,0,0,0.5);
   height: 100vh;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   width: 100vw;
   top: 0;
   left: 0;

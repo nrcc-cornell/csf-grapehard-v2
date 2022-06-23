@@ -19,10 +19,31 @@ exporting(Highcharts);
 
 
 // Colors used in chart
-const blue = 'rgb(125,181,236)';
+const purple = 'rgb(239,37,230)';
+// const purple = 'rgb(125,181,236)';  // light blue
 const yellow = 'rgb(235,200,35)';
 const orange = 'rgb(245,152,57)';
 const red = 'rgb(239,32,32)';
+const green = 'rgb(0,187,0)';
+const mediumGreen = 'rgb(0,157,0)';
+const darkGreen = 'rgb(0,107,0)';
+
+// Buttons Style
+const btnSX = (isSelected) => ({
+  position: 'absolute',
+  transform: 'translateX(-50%)',
+  left: -103,
+  width: 145,
+  height: 37,
+  color: 'white',
+  backgroundColor: isSelected ? darkGreen : green,
+  borderRadius: 37,
+  textTransform: 'none',
+  '&:hover': {
+    backgroundColor: isSelected ? darkGreen : mediumGreen,
+    cursor: isSelected ? 'default' : 'pointer'
+  }
+});
 
 // Info for each stage of bud development
 const stageInfo = {
@@ -141,7 +162,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
     const newSeries = [{
       data: minTemps,
       name: 'Daily Minimum Temperature',
-      color: blue,
+      color: purple,
       id: 'daily',
       isForecast: false
     },{
@@ -160,7 +181,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
       newSeries.push({
         data: fillWith(forecast.minTemps, dates.length + forecast.dates.length, null, false),
         name: 'Daily Minimum Temperature',
-        color: blue,
+        color: purple,
         dashStyle: 'ShortDot',
         linkedTo: 'daily',
         isForecast: true
@@ -244,15 +265,38 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
         softMin: -27,
         softMax: 60,
         startOnTick: false,
+        plotBands: [{
+          from: -Infinity,
+          to: 32,
+          color: {
+            linearGradient:  { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+              [0, 'rgba(73,246,249,0.1)'],
+              [0.5, 'rgba(73,246,249,0.15)'],
+              [1, 'rgba(73,246,249,0.3)'],
+            ]
+          },
+        },{
+          from: 32,
+          to: Infinity,
+          color: {
+            linearGradient:  { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+              [0, 'rgba(255,0,0,0.1)'],
+              [1, 'rgba(73,246,249,0.1)'],
+            ]
+          },
+        }],
         plotLines: [{
           value: 32,
           label: {
             text: 'Freeze Point',
             align: 'right',
-            style: { color: 'rgb(200,200,200)' }
+            style: { color: 'rgb(175,175,175)' },
+            x: -10
           },
           dashStyle: 'Dash',
-          color: 'rgb(200,200,200)',
+          color: 'rgba(73,246,249,0.5)',
           width: 3
         }]
       },
@@ -298,8 +342,8 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
               gridColumnGap: '3px',
               alignItems: 'center'
             }}>
-              <Box style={{ color: blue }}>Min Temperature:</Box>
-              <Box style={{ color: blue, justifySelf: 'right' }}><span style={{ fontWeight: 'bold' }}>{this.points[0].y}</span>°F</Box>
+              <Box style={{ color: purple }}>Min Temperature:</Box>
+              <Box style={{ color: purple, justifySelf: 'right' }}><span style={{ fontWeight: 'bold' }}>{this.points[0].y}</span>°F</Box>
 
               {temps}
             </Box>
@@ -313,16 +357,13 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
   return (
     <Box sx={{
       position: 'relative',
-      paddingTop: '60px',
-      height: 380,
+      height: '100%',
       width: '100%'
     }}>
       <Button
         sx={{
-          position: 'absolute',
-          top: 12,
-          left: '20%',
-          transform: 'translateX(-50%)'
+          ...btnSX(isZoomed === 'doi'),
+          bottom: 50
         }}
         onClick={thirtyZoom}
       >
@@ -331,10 +372,8 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
 
       <Button
         sx={{
-          position: 'absolute',
-          top: 12,
-          left: '80%',
-          transform: 'translateX(-50%)'
+          ...btnSX(isZoomed === 'season'),
+          bottom: 10,
         }}
         onClick={seasonZoom}
       >
