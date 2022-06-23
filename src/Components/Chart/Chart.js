@@ -286,18 +286,6 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
               [1, 'rgba(73,246,249,0.1)'],
             ]
           },
-        }],
-        plotLines: [{
-          value: 32,
-          label: {
-            text: 'Freeze Point',
-            align: 'right',
-            style: { color: 'rgb(175,175,175)' },
-            x: -10
-          },
-          dashStyle: 'Dash',
-          color: 'rgba(73,246,249,0.5)',
-          width: 3
         }]
       },
       tooltip: {

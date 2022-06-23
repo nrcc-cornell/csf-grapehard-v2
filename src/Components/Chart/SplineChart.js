@@ -39,10 +39,16 @@ export default function Chart({ data }) {
           },
           series: [{
             data: data[0],
-            name: 'Hourly Temp Spline'
+            name: 'Hourly Temp Spline',
+            color: 'black'
           },{
             data: data[1],
-            name: 'Daily Min Temp'
+            name: 'Daily Min Temp',
+            color: 'blue'
+          },{
+            data: data[2],
+            name: 'Daily Max Temp',
+            color: 'red'
           }],
           tooltip: {
             shared: true
