@@ -76,12 +76,20 @@ function fetchFromAcis(loc, sdate, edate, elems) {
 // Calculates the start and end dates for the season the given date fall within
 function calcSeasonBounds(date) {
   let seasonStart = parseInt(date.split('-')[0]);
-  if (!isAfter(parseISO(date), parseISO(`${seasonStart}-07-31`))) seasonStart -= 1;
+
+
+  /////// Need to change these dates back to 07-31 and 08-01 at some point
+
+  if (!isAfter(parseISO(date), parseISO(`${seasonStart}-08-31`))) seasonStart -= 1;
 
   return {
-    seasonStart: `${seasonStart}-08-01`,
-    seasonEnd: `${seasonStart + 1}-07-31`
+    seasonStart: `${seasonStart}-09-01`,
+    seasonEnd: `${seasonStart + 1}-08-31`
   };
+
+
+
+
 }
 
 
@@ -142,12 +150,12 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
   }];
 
   // Gather data from ACIS API
+  // let temperatures = await fetchFromAcis([-76.3351,42.5178], seasonStart, dataEndDate, temperatureElems);
   let temperatures = await fetchFromAcis(loc, seasonStart, dataEndDate, temperatureElems);
   
   if (temperatures[temperatures.length - 1][1] === -999) {
     temperatures.pop();
   }
-  
   
   //////////////////////////////////////////////////////
   //////////////////////////////////////////////////////
@@ -179,6 +187,7 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
   thresholdArr = thresholdArr.sort((a,b) => b-a);
   
   let chillSum = 0;
+
   for (let i = 0; i < xs[xs.length - 1]; i++) {
     // Use Spline to calculate the hourly temp
     const hourlyTemp = spline.at(i);
@@ -196,6 +205,14 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
 
     // Add chill units to sum, but ensure that the sum never goes below 0
     chillSum = Math.max(0, chillSum + chill);
+
+    // if (i / 24 >= 37 && i/24 < 68) {
+    //   console.log(dates[Math.floor(i/24)], i % 24, chill, hourlyTemp);
+    // }
+
+    // if ((i + 1) % 24 === 0) {
+    //   console.log((i + 1) / 24 - 1, chillSum);
+    // }
 
     // Check if chill unit sum has crossed any of the thresholds provided in thresholdArr
     let j = 0;
