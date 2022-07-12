@@ -78,7 +78,7 @@ function calcSeasonBounds(date) {
   let seasonStart = parseInt(date.split('-')[0]);
 
 
-  /////// Need to change these dates back to 07-31 and 08-01 at some point
+  /////// Need to change these dates back to 07-31 and 08-01 at some point if Art says to
 
   if (!isAfter(parseISO(date), parseISO(`${seasonStart}-08-31`))) seasonStart -= 1;
 
@@ -86,10 +86,6 @@ function calcSeasonBounds(date) {
     seasonStart: `${seasonStart}-09-01`,
     seasonEnd: `${seasonStart + 1}-08-31`
   };
-
-
-
-
 }
 
 
@@ -150,33 +146,18 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
   }];
 
   // Gather data from ACIS API
-  // let temperatures = await fetchFromAcis([-76.3351,42.5178], seasonStart, dataEndDate, temperatureElems);
   let temperatures = await fetchFromAcis(loc, seasonStart, dataEndDate, temperatureElems);
   
   if (temperatures[temperatures.length - 1][1] === -999) {
     temperatures.pop();
   }
   
-  //////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////
-  const sLine = [[], [], []];
-  //////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////
-  
   // Convert ACIS data into arrays for return and for instantiating Spline
   const minTemps = [], dates = [];
   const xs = Array.from({length: temperatures.length * 2}, (v, i) => 12 * i);
-  const ys = temperatures.map((arr, i) => {
+  const ys = temperatures.map(arr => {
     dates.push(arr[0]);
     minTemps.push(arr[1]);
-
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    sLine[1].push([i * 24, arr[1]]);
-    sLine[2].push([i * 24 + 12, arr[2]]);
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-
     return [arr[1],arr[2]];
   }).flat();
 
@@ -192,27 +173,11 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
     // Use Spline to calculate the hourly temp
     const hourlyTemp = spline.at(i);
 
-
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    sLine[0].push([i, hourlyTemp]);
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-
-
     // Use hourly temp to calculate hourly chill units
     const chill = calcHourlyChillUnits(hourlyTemp);
 
     // Add chill units to sum, but ensure that the sum never goes below 0
     chillSum = Math.max(0, chillSum + chill);
-
-    // if (i / 24 >= 37 && i/24 < 68) {
-    //   console.log(dates[Math.floor(i/24)], i % 24, chill, hourlyTemp);
-    // }
-
-    // if ((i + 1) % 24 === 0) {
-    //   console.log((i + 1) / 24 - 1, chillSum);
-    // }
 
     // Check if chill unit sum has crossed any of the thresholds provided in thresholdArr
     let j = 0;
@@ -228,8 +193,8 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
       }
     }
 
-    // End the loop if all of the thresholds have been crossed
-    // if (j === 0) break;                       ////////////////////////// UNCOMMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Optimization to prevent unnecessary loops
+    if (j === 0) break;
   }
 
   // Elem obj for retrieving GDDs from ACIS API
@@ -276,8 +241,7 @@ async function getData(loc, dateOfInterest, thresholdArr, gddBase) {
     });
   }
 
-  return { ...results, sLine };
-  // return results;
+  return results;
 }
 
 
