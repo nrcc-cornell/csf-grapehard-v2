@@ -22,7 +22,6 @@ import {
 
 import LocationPicker from './Components/LocationPicker/LocationPicker';
 import Chart from './Components/Chart/Chart';
-import SplineChart from './Components/Chart/SplineChart';
 import Loading from './Components/Loading';
 
 const green = '#0B0';
@@ -161,14 +160,6 @@ function App() {
             />
           }
         </Box>
-      </Box>
-
-      <Box>
-        {Object.keys(data).length === 0 ?
-          <Loading />
-          :
-          <SplineChart data={data.sLine} />
-        }
       </Box>
     </Box>
   );
