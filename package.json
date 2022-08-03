@@ -23,11 +23,12 @@
     "eslint": "^8.17.0",
     "eslint-plugin-react": "^7.30.0",
     "gh-pages": "^4.0.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "rewire": "^6.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "node ./scripts/build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
@@ -43,7 +44,11 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not ie 11",
+      "not chrome < 51",
+      "not safari < 10",
+      "not android < 51"
     ],
     "development": [
       "last 1 chrome version",

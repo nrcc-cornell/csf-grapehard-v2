@@ -106,10 +106,13 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
+  margin: 0;
   margin-right: 8px;
   max-width: 500px;
   padding: 4px 8px;
   width: 62.5%;
+  background-color: white;
+  height: 32px;
 }
 
 #loc-map-address-search:focus {
@@ -186,21 +189,25 @@
   background-color: rgb(200,200,200);
   border-radius: 50%;
   color: rgb(80,80,80);
-  font-size: 13px;
-  height: 11px;
-  line-height: 8px;
-  padding: 6px;
+  height: 18px;
+  width: 18px;
   position: absolute;
   top: 3px;
   right: 3px;
-  text-align: center;
-  width: 11px;
-  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #loc-modal-close:hover {
   background-color: rgb(170,170,170);
   cursor: pointer;
+}
+
+#loc-modal-close-x {
+  line-height: 10px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 @media (max-width: 430px) {

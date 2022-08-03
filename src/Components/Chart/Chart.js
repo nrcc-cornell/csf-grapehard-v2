@@ -20,7 +20,6 @@ exporting(Highcharts);
 
 // Colors used in chart
 const purple = 'rgb(239,37,230)';
-// const purple = 'rgb(125,181,236)';  // light blue
 const yellow = 'rgb(235,200,35)';
 const orange = 'rgb(245,152,57)';
 const red = 'rgb(239,32,32)';
@@ -204,6 +203,7 @@ export default function Chart({ appleType, applePhenology, dates, dateOfInterest
         href: 'http://www.nrcc.cornell.edu/'
       },
       chart: {
+        height: '396px',
         zoomType: 'x',
         events: {
           load: function () {

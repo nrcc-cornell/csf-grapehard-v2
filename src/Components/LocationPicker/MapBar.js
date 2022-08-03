@@ -70,7 +70,7 @@ export default function MapBar( props ) {
         onClick={handleSearch}
       >Search</button>
 
-      <div id='loc-modal-close' onClick={props.handleClose}>X</div>
+      <div id='loc-modal-close' onClick={props.handleClose}><div id='loc-modal-close-x'>X</div></div>
     </div>
   );
 }
