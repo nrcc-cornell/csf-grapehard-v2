@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/csf-grapehard-v2/style/csf-grapehard-v2.css",
+    "main.js": "/csf-grapehard-v2/js/toolinit.js",
+    "index.html": "/csf-grapehard-v2/index.html",
+    "static/media/pin-blue.svg": "/csf-grapehard-v2/static/media/pin-blue.a84f9033aac1da64f933.svg",
+    "static/media/pin-red.svg": "/csf-grapehard-v2/static/media/pin-red.8ec759728dab1e5998f4.svg",
+    "csf-grapehard-v2.css.map": "/csf-grapehard-v2/style/csf-grapehard-v2.css.map",
+    "toolinit.js.map": "/csf-grapehard-v2/js/toolinit.js.map"
+  },
+  "entrypoints": [
+    "style/csf-grapehard-v2.css",
+    "js/toolinit.js"
+  ]
+}
