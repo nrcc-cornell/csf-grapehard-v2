@@ -17,7 +17,7 @@ config.output.filename = 'js/toolinit.js';
 // 'load-dependencies.js' is placed in public/js, and loaded by CSF site.
 // It loads this specified css file, so path/filename needs to be correct.
 const miniCssExtractPlugin = config.plugins.find(element => element.constructor.name === "MiniCssExtractPlugin");
-miniCssExtractPlugin.options.filename = "style/csf-grapehard-v4.css"
+miniCssExtractPlugin.options.filename = "style/csf-grapehard-v2.css"
 
 // Disable splitting
 // We need single files for loading in CSF, must avoid chunking files.

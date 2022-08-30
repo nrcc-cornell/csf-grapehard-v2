@@ -1,8 +1,8 @@
 {
   "name": "grape-hardiness",
-  "version": "1.0",
+  "version": "2.0",
   "private": true,
-  "homepage": "https://pages.github.coecis.cornell.edu/be99/grape-hardiness/",
+  "homepage": "https://nrcc-cornell.github.io/csf-grapehard-v2/",
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
