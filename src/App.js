@@ -163,7 +163,14 @@ function App() {
         ) : (
           <OptionsPopper>{renderOptions()}</OptionsPopper>
         )}
-        <Box sx={{ width: '100%' }}>
+        <Box
+          sx={{
+            width: '100%',
+            '@media (min-width: 908px)': {
+              width: '732px',
+            },
+          }}
+        >
           {Object.keys(weatherData).length === 0 ||
           hardinessData.length === 0 ? (
             <Loading />
