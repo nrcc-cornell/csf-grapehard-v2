@@ -117,5 +117,5 @@ Options.propTypes = {
   isZoomed: PropTypes.string,
   thirtyZoom: PropTypes.func,
   seasonZoom: PropTypes.func,
-  grapeVarieties: PropTypes.object,
+  grapeVarieties: PropTypes.array,
 };

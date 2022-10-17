@@ -57,7 +57,7 @@ function App() {
   const thirtyZoom = () => {
     if (chartComponent && chartComponent.current) {
       const datesArr = chartComponent.current.chart.xAxis[0].categories;
-      const iOfDOI = datesArr.findIndex((date) => date === date);
+      const iOfDOI = datesArr.findIndex((d) => d === date);
 
       // if iOfDOI is too close to beginning or end of season, adjust where the range starts and ends
       let end = iOfDOI + 15;
@@ -134,13 +134,13 @@ function App() {
       <Box
         sx={{
           display: 'flex',
-          width: 904,
+          width: 893,
           height: 400,
           border: `2px solid ${green}`,
           margin: '20px auto',
           '@media (max-width: 907px)': {
             boxSizing: 'border-box',
-            width: '100vw',
+            width: '100%',
             flexDirection: 'column',
             height: 444,
           },
@@ -163,15 +163,7 @@ function App() {
         ) : (
           <OptionsPopper>{renderOptions()}</OptionsPopper>
         )}
-        <Box
-          sx={{
-            width: windowWidth - 4,
-            '@media (min-width: 908px)': {
-              maxWidth: 700,
-              width: windowWidth - 200,
-            },
-          }}
-        >
+        <Box sx={{ width: '100%' }}>
           {Object.keys(weatherData).length === 0 ||
           hardinessData.length === 0 ? (
             <Loading />

@@ -45,6 +45,8 @@ export default function Chart({
             const iOfDOI = datesArr.findIndex(
               (date) => date === dateOfInterest
             );
+            console.log(dateOfInterest, iOfDOI);
+            console.log(datesArr);
 
             // if iOfDOI is too close to beginning or end of season, adjust where the range starts and ends
             let end = iOfDOI + 15;
@@ -202,8 +204,6 @@ export default function Chart({
         formatter: function () {
           if (!this || !this.points) return '';
 
-          console.log(this.points);
-
           return renderToStaticMarkup(
             <Box
               style={{
@@ -267,7 +267,7 @@ export default function Chart({
         },
       },
     };
-  }, [hardinessData, weatherData, grapeType, loc]);
+  }, [hardinessData, weatherData, grapeType, loc, dateOfInterest]);
 
   return (
     <Box
