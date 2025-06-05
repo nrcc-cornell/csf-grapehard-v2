@@ -1,0 +1,47 @@
+{
+  "id": 68,
+  "title": "Grape Cold Hardiness",
+  "cultivars": [
+    {
+      "cultivarName": "Concord",
+      "modelHelperFunction": "grapeColdHardinessNYUS1",
+      "displayModelName": "NYUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "Cabernet Sauvignon",
+      "modelHelperFunction": "grapeColdHardinessNYUS1",
+      "displayModelName": "NYUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "Riesling",
+      "modelHelperFunction": "grapeColdHardinessNYUS1",
+      "displayModelName": "NYUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "Marquette",
+      "modelHelperFunction": "grapeColdHardinessWIUS1",
+      "displayModelName": "WIUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "Frontenac",
+      "modelHelperFunction": "grapeColdHardinessWIUS1",
+      "displayModelName": "WIUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "La Crescent",
+      "modelHelperFunction": "grapeColdHardinessWIUS1",
+      "displayModelName": "WIUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "Brianna",
+      "modelHelperFunction": "grapeColdHardinessWIUS1",
+      "displayModelName": "WIUS1 ColdSnap Model"
+    },
+    {
+      "cultivarName": "Petite Pearl",
+      "modelHelperFunction": "grapeColdHardinessWIUS1",
+      "displayModelName": "WIUS1 ColdSnap Model"
+    }
+  ],
+  "elements": {}
+}

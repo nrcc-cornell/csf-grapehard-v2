@@ -19,5 +19,5 @@ module.exports = {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
   },
-  ignorePatterns: ['build.js'],
+  ignorePatterns: ['build.js','src/Scripts/newa/*'],
 };

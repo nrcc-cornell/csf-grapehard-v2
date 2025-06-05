@@ -24,3 +24,4 @@ yarn-error.log*
 
 source.py
 /p2env
+.vscode

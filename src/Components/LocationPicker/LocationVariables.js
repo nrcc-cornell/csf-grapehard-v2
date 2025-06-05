@@ -1,5 +1,4 @@
-const token =
-  'pk.eyJ1IjoicHJlY2lwYWRtaW4iLCJhIjoiY2xkdDhlOGMxMW04NzNxbnZ6MzhiaTc5aiJ9.3U9xP_U4rruZi7XybaGLNQ';
+const token = 'pk.eyJ1IjoicHJlY2lwYWRtaW4iLCJhIjoiY2xkdDhlOGMxMW04NzNxbnZ6MzhiaTc5aiJ9.3U9xP_U4rruZi7XybaGLNQ';
 
 const bbox = {
   north: 47.53,

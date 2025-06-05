@@ -3,8 +3,8 @@ import { format, parseISO, isWithinInterval } from 'date-fns';
 
 import { Box } from '@mui/material';
 
-import { getWeatherData } from './Scripts/getWeatherData';
-import { calcHardiness, grapeVarieties } from './Scripts/calcHardiness';
+import { getWeatherData, calcHardiness } from './Scripts/coordinateNewaFunctions';
+import { grapeVarieties } from './Scripts/newa';
 
 import { name } from './Components/LocationPicker/LocationVariables';
 import Chart from './Components/Chart/Chart';
@@ -17,9 +17,9 @@ import useWindowWidth from './Hooks/useWindowWidth';
 const green = '#0B0';
 
 function App() {
-  const [grapeType, setGrapeType] = useState(grapeVarieties[0]);
+  const [grapeType, setGrapeType] = useState(grapeVarieties.cultivars[0]);
   const [weatherData, setWeatherData] = useState({});
-  const [hardinessData, sethardinessData] = useState([]);
+  const [hardinessData, setHardinessData] = useState({});
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [locations, setLocations] = useState(() => {
     const stored = localStorage.getItem(`${name}.locations`);
@@ -39,8 +39,10 @@ function App() {
 
   // Update chart data when weather data or grapeType change
   useEffect(() => {
-    if (Object.keys(weatherData).includes('avgTemps')) {
-      sethardinessData(calcHardiness(grapeType, weatherData.avgTemps));
+    if (Object.keys(weatherData).includes('dailyData')) {
+      (async () => {
+        setHardinessData(await calcHardiness(grapeType, weatherData));
+      })();
     }
   }, [weatherData, grapeType]);
 
@@ -86,7 +88,8 @@ function App() {
     if (selected) {
       setWeatherData({});
       const newData = await getWeatherData(
-        [locations[selected].lng, locations[selected].lat],
+        locations[selected].lat,
+        locations[selected].lng,
         doi
       );
       setWeatherData(newData);
@@ -100,8 +103,8 @@ function App() {
 
     if (
       !isWithinInterval(newDate, {
-        start: parseISO(weatherData.dates[0]),
-        end: parseISO(weatherData.dates[weatherData.dates.length - 1]),
+        start: parseISO(weatherData.dailyWeatherData[0].serverDate),
+        end: parseISO(weatherData.dailyWeatherData[weatherData.dailyWeatherData.length - 1].serverDate),
       })
     ) {
       await updateWeatherData(newDateStr);
@@ -121,7 +124,7 @@ function App() {
         handleDateChange={handleDateChange}
         grapeType={grapeType}
         setGrapeType={setGrapeType}
-        grapeVarieties={grapeVarieties}
+        grapeVarieties={grapeVarieties.cultivars}
         isZoomed={isZoomed}
         thirtyZoom={thirtyZoom}
         seasonZoom={seasonZoom}
@@ -137,7 +140,7 @@ function App() {
           width: 893,
           height: 400,
           border: `2px solid ${green}`,
-          margin: '20px auto',
+          margin: '20px auto 0px',
           '@media (max-width: 907px)': {
             boxSizing: 'border-box',
             width: '100%',
@@ -172,13 +175,12 @@ function App() {
           }}
         >
           {Object.keys(weatherData).length === 0 ||
-          hardinessData.length === 0 ? (
+          Object.keys(hardinessData).length === 0 ? (
             <Loading />
           ) : (
             <Chart
               grapeType={grapeType}
               hardinessData={hardinessData}
-              weatherData={weatherData}
               dateOfInterest={date}
               loc={locations[selected].address}
               chartComponent={chartComponent}
@@ -186,6 +188,26 @@ function App() {
             />
           )}
         </Box>
+      </Box>
+
+      <Box sx={{
+        fontSize: 12,
+        color: 'rgb(100,100,100)',
+        width: 893,
+        textAlign: 'center',
+        margin: '6px auto 20px'
+      }}>
+        Based on research at 
+        &nbsp;<a href="https://cals.cornell.edu/integrated-pest-management" target="_blank" rel="noopener noreferrer">Cornell Integrated Pest Management</a>&nbsp;
+        and
+        &nbsp;<a href="https://pasdept.wisc.edu/directory/amaya-atucha/" target="blank">University of Wisconsin - Madison</a>
+        , with funding from
+        &nbsp;<a href="https://portal.nifa.usda.gov/web/crisprojectpages/1029870-coldsnap-an-online-bud-cold-hardiness-prediction-tool-to-assist-grapevine-management-decisions.html" target="_blank" rel="noopener noreferrer">USDA National Institute of Food and Agriculture Grant #2023-68008-39274</a>
+        . Tool developed by
+        &nbsp;<a href="https://newa.cornell.edu/" target="_blank" rel="noopener noreferrer">NEWA</a>&nbsp;
+        and
+        &nbsp;<a href="https://www.nrcc.cornell.edu" target="_blank" rel="noopener noreferrer">NRCC</a>
+        .
       </Box>
     </Box>
   );
