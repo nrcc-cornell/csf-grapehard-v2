@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 
 import { Box } from '@mui/material';
 
-import { fillWith } from '../../Scripts/getWeatherData';
+import { fillWith } from '../../Scripts/fillWith';
 
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -23,7 +23,6 @@ const orange = 'rgb(245,152,57)';
 export default function Chart({
   grapeType,
   hardinessData,
-  weatherData,
   dateOfInterest,
   loc,
   chartComponent,
@@ -45,8 +44,6 @@ export default function Chart({
             const iOfDOI = datesArr.findIndex(
               (date) => date === dateOfInterest
             );
-            console.log(dateOfInterest, iOfDOI);
-            console.log(datesArr);
 
             // if iOfDOI is too close to beginning or end of season, adjust where the range starts and ends
             let end = iOfDOI + 15;
@@ -91,21 +88,21 @@ export default function Chart({
         },
       },
       title: {
-        text: `${grapeType} Freeze Damage Potential`,
+        text: `${grapeType.cultivarName} Freeze Damage Potential`,
       },
       subtitle: {
         text: `@${loc}`,
       },
       series: [
         {
-          data: weatherData.minTemps.slice(0, -5),
+          data: hardinessData.mints.slice(0, -hardinessData.forecastDays),
           name: 'Daily Minimum Temperature',
           color: purple,
           id: 'daily',
           isForecast: false,
         },
         {
-          data: hardinessData.slice(0, -5),
+          data: hardinessData.hardiness.slice(0, -hardinessData.forecastDays),
           name: 'Hardiness Temperature',
           color: orange,
           id: 'hardiness',
@@ -113,8 +110,8 @@ export default function Chart({
         },
         {
           data: fillWith(
-            weatherData.minTemps.slice(-5),
-            weatherData.dates.length,
+            hardinessData.mints.slice(-hardinessData.forecastDays),
+            hardinessData.dates.length,
             null,
             false
           ),
@@ -126,8 +123,8 @@ export default function Chart({
         },
         {
           data: fillWith(
-            hardinessData.slice(-5),
-            weatherData.dates.length,
+            hardinessData.hardiness.slice(-hardinessData.forecastDays),
+            hardinessData.dates.length,
             null,
             false
           ),
@@ -139,7 +136,7 @@ export default function Chart({
         },
       ],
       xAxis: {
-        categories: weatherData.dates,
+        categories: hardinessData.dates,
         crosshair: {
           color: 'rgb(220,220,220)',
           width: 0.5,
@@ -267,7 +264,7 @@ export default function Chart({
         },
       },
     };
-  }, [hardinessData, weatherData, grapeType, loc, dateOfInterest]);
+  }, [hardinessData, grapeType, loc, dateOfInterest]);
 
   return (
     <Box
@@ -287,9 +284,8 @@ export default function Chart({
 }
 
 Chart.propTypes = {
-  grapeType: PropTypes.string,
-  hardinessData: PropTypes.array,
-  weatherData: PropTypes.object,
+  grapeType: PropTypes.object,
+  hardinessData: PropTypes.object,
   dateOfInterest: PropTypes.string,
   loc: PropTypes.string,
   chartComponent: PropTypes.object,

@@ -79,17 +79,18 @@ export default function Options({
       />
       <TextField
         select
-        value={grapeType}
-        onChange={(e) => setGrapeType(e.target.value)}
+        value={grapeType.cultivarName}
+        onChange={(e) => setGrapeType(grapeVarieties.find(cultivarObj => cultivarObj.cultivarName === e.target.value))}
         label='Grape Type'
+        helperText={`${grapeType.displayModelName} is used for cultivar`}
         sx={{
           position: 'relative',
           top: '4px',
         }}
       >
-        {grapeVarieties.map((name) => (
-          <MenuItem key={name} value={name}>
-            {name}
+        {grapeVarieties.map(({ cultivarName }) => (
+          <MenuItem key={cultivarName} value={cultivarName}>
+            {cultivarName}
           </MenuItem>
         ))}
       </TextField>
@@ -107,7 +108,7 @@ export default function Options({
 
 Options.propTypes = {
   selected: PropTypes.string,
-  grapeType: PropTypes.string,
+  grapeType: PropTypes.object,
   locations: PropTypes.object,
   date: PropTypes.string,
   setGrapeType: PropTypes.func,

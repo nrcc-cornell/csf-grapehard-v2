@@ -48,7 +48,7 @@ export default function MapBar( props ) {
         }
       })
       .catch(e => {
-        console.log(e);
+        console.error(e);
         return false;
       });
   };
